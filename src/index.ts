@@ -13,13 +13,16 @@ import type { Element } from "hast";
  */
 function remarkAutolink(this: Processor) {
 	const data = this.data();
-	add("micromarkExtensions", gfmAutolinkLiteral());
-	add("fromMarkdownExtensions", gfmAutolinkLiteralFromMarkdown());
 
-	function add(field: Exclude<keyof typeof data, "settings">, value: any) {
-		const list = data[field] ? data[field] : (data[field] = []);
-		list.push(value);
+	if (data.micromarkExtensions === undefined) {
+		data.micromarkExtensions = [];
 	}
+	data.micromarkExtensions.push(gfmAutolinkLiteral());
+
+	if (data.fromMarkdownExtensions === undefined) {
+		data.fromMarkdownExtensions = [];
+	}
+	data.fromMarkdownExtensions.push(gfmAutolinkLiteralFromMarkdown());
 }
 
 export type Mention =
@@ -225,33 +228,37 @@ async function resolveMention(
 	mentionNode: DiscordMentionNode,
 ) {
 	switch (mention.type) {
-		case "user":
+		case "user": {
 			const name = await resolver.user(mention);
 			(mentionNode as DiscordUserMentionNode).displayName =
 				name ?? "unknown-user";
 			break;
-		case "role":
+		}
+		case "role": {
 			const role = await resolver.role(mention);
 			(mentionNode as DiscordRoleMentionNode).name =
 				role?.name ?? "unknown-role";
 			(mentionNode as DiscordRoleMentionNode).color = role?.color;
 			break;
-		case "channel":
+		}
+		case "channel": {
 			const channel = await resolver.channel(mention);
 			(mentionNode as DiscordChannelMentionNode).name =
 				channel ?? "unknown-channel";
 			break;
+		}
 		case "emoji":
 			(mentionNode as DiscordEmojiMentionNode).url =
 				await resolver.emoji(mention);
 			break;
-		case "timestamp":
+		case "timestamp": {
 			const timestamp = await resolver.timestamp(mention);
 			if (timestamp !== null) {
 				(mentionNode as DiscordTimestampMentionNode).dateString =
 					timestamp;
 			}
 			break;
+		}
 		case "command":
 			// Already filled in by createNode()
 			break;

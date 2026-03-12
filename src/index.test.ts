@@ -7,6 +7,11 @@ import remarkDiscord, {
 	discordRemarkRehypeHandlers,
 	type Resolver,
 	type DiscordMentionNode,
+	type DiscordRoleMentionNode,
+	type DiscordChannelMentionNode,
+	type DiscordUserMentionNode,
+	type DiscordEmojiMentionNode,
+	type DiscordTimestampMentionNode,
 } from "./index";
 import type { Root } from "mdast";
 
@@ -180,29 +185,33 @@ describe("mention parsing", () => {
 describe("default values (resolver returns null)", () => {
 	test("unknown user falls back to 'unknown-user'", async () => {
 		const [node] = await getNodes("<@000>");
-		expect((node as any).displayName).toBe("unknown-user");
+		expect((node as DiscordUserMentionNode).displayName).toBe(
+			"unknown-user",
+		);
 	});
 
 	test("unknown role falls back to 'unknown-role'", async () => {
 		const [node] = await getNodes("<@&000>");
-		expect((node as any).name).toBe("unknown-role");
+		expect((node as DiscordRoleMentionNode).name).toBe("unknown-role");
 	});
 
 	test("unknown channel falls back to 'unknown-channel'", async () => {
 		const [node] = await getNodes("<#000>");
-		expect((node as any).name).toBe("unknown-channel");
+		expect((node as DiscordChannelMentionNode).name).toBe(
+			"unknown-channel",
+		);
 	});
 
 	test("unknown emoji has null url", async () => {
 		const [node] = await getNodes("<:shrug:000>");
-		expect((node as any).url).toBeNull();
+		expect((node as DiscordEmojiMentionNode).url).toBeNull();
 	});
 });
 
 describe("timestamp formatting", () => {
 	test("formats date in America/Indianapolis timezone", async () => {
 		const [node] = await getNodes("<t:1700000000>");
-		expect((node as any).dateString).toBe(
+		expect((node as DiscordTimestampMentionNode).dateString).toBe(
 			new Date(1700000000).toLocaleString("en-US", {
 				timeZone: "America/Indianapolis",
 			}),
