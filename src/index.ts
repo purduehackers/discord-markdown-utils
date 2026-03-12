@@ -327,7 +327,7 @@ export interface DiscordOptions {
 	resolver: Resolver;
 }
 
-function remarkDiscord(this: Processor, { resolver }: DiscordOptions) {
+export function remarkDiscord(this: Processor, { resolver }: DiscordOptions) {
 	remarkAutolink.call(this);
 
 	return async (tree: Root) => {

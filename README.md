@@ -17,7 +17,8 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
-import remarkDiscord, {
+import {
+	remarkDiscord,
 	discordRemarkRehypeHandlers,
 } from "@purduehackers/discord-markdown-utils";
 
