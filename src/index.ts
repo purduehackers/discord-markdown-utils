@@ -83,16 +83,6 @@ declare module "mdast" {
 	}
 }
 
-// prettier-ignore
-type MentionToNode<T extends Mention> =
-    T extends { type: "user" }      ? DiscordUserMentionNode :
-    T extends { type: "role" }      ? DiscordRoleMentionNode :
-    T extends { type: "channel" }   ? DiscordChannelMentionNode :
-    T extends { type: "emoji" }     ? DiscordEmojiMentionNode :
-    T extends { type: "timestamp" } ? DiscordTimestampMentionNode :
-    T extends { type: "command" }   ? DiscordCommandMentionNode :
-    never;
-
 // TypeScript doesn't have dependent typing, so we can't have a single function
 // which returns different types based on the parameter type.
 export interface Resolver {

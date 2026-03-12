@@ -15,16 +15,21 @@
 	],
 	"scripts": {
 		"build": "tsc --project tsconfig.build.json",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"lint": "eslint"
 	},
 	"devDependencies": {
+		"@eslint/js": "^10.0.1",
 		"@types/hast": "^3.0.4",
 		"@types/mdast": "^4.0.4",
 		"@types/unist": "^3.0.3",
+		"eslint": "^10.0.3",
+		"globals": "^17.4.0",
 		"mdast-util-to-hast": "^13.2.1",
 		"prettier": "^3.8.1",
 		"rehype-stringify": "^10.0.1",
-		"remark-rehype": "^11.1.2"
+		"remark-rehype": "^11.1.2",
+		"typescript-eslint": "^8.57.0"
 	},
 	"peerDependencies": {
 		"remark-parse": "^11.0.0",
