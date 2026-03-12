@@ -1,5 +1,5 @@
 {
-  "name": "@purduehackers/discord-markdown-utils",
+	"name": "@purduehackers/discord-markdown-utils",
 	"module": "src/index.ts",
 	"type": "module",
 	"exports": {
@@ -14,13 +14,15 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "tsc --project tsconfig.build.json"
+		"build": "tsc --project tsconfig.build.json",
+		"format": "prettier --write ."
 	},
 	"devDependencies": {
 		"@types/hast": "^3.0.4",
 		"@types/mdast": "^4.0.4",
 		"@types/unist": "^3.0.3",
 		"mdast-util-to-hast": "^13.2.1",
+		"prettier": "^3.8.1",
 		"rehype-stringify": "^10.0.1",
 		"remark-rehype": "^11.1.2"
 	},
