@@ -22,7 +22,7 @@ function remarkAutolink(this: Processor) {
 	}
 }
 
-type Mention =
+export type Mention =
 	| { type: "user"; id: string }
 	| { type: "role"; id: string }
 	| { type: "channel"; id: string }
@@ -93,15 +93,21 @@ type MentionToNode<T extends Mention> =
     T extends { type: "command" }   ? DiscordCommandMentionNode :
     never;
 
-export type ResolverResult<T extends Mention> =
-	| (T extends { type: "role" }
-			? { name: string; color?: string } // roles have a name and color
-			: string)
-	| null;
-
-export type Resolver = <T extends Mention>(
-	node: T,
-) => Promise<ResolverResult<T>>;
+// TypeScript doesn't have dependent typing, so we can't have a single function
+// which returns different types based on the parameter type.
+export interface Resolver {
+	user(mention: Extract<Mention, { type: "user" }>): Promise<string | null>;
+	role(
+		mention: Extract<Mention, { type: "role" }>,
+	): Promise<{ name: string; color?: string } | null>;
+	channel(
+		mention: Extract<Mention, { type: "channel" }>,
+	): Promise<string | null>;
+	emoji(mention: Extract<Mention, { type: "emoji" }>): Promise<string | null>;
+	timestamp(
+		mention: Extract<Mention, { type: "timestamp" }>,
+	): Promise<string | null>;
+}
 
 type PositionedMention = {
 	start: number;
@@ -116,7 +122,7 @@ const patterns = {
 	emoji: /<(a?):(\w+):(\d+)>/g,
 	timestamp: /<t:(\d+)(?::[tTdDfFR])?>/g,
 	// See https://docs.discord.com/developers/interactions/application-commands#application-command-object
-	command: /<([-_'\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}):(\d+)?>/gu,
+	command: /<(\/[-_'\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}):(\d+)?>/gu,
 } as const;
 
 function findMentions(text: string): PositionedMention[] {
@@ -203,7 +209,7 @@ function createNode(mention: Mention): DiscordMentionNode {
 		case "emoji":
 			return {
 				type: "discordEmoji",
-				animated: false,
+				animated: mention.animated,
 				name: mention.name,
 				id: mention.id,
 				url: null,
@@ -230,27 +236,27 @@ async function resolveMention(
 ) {
 	switch (mention.type) {
 		case "user":
-			const name = await resolver(mention);
+			const name = await resolver.user(mention);
 			(mentionNode as DiscordUserMentionNode).displayName =
 				name ?? "unknown-user";
 			break;
 		case "role":
-			const role = await resolver(mention);
+			const role = await resolver.role(mention);
 			(mentionNode as DiscordRoleMentionNode).name =
 				role?.name ?? "unknown-role";
 			(mentionNode as DiscordRoleMentionNode).color = role?.color;
 			break;
 		case "channel":
-			const channel = await resolver(mention);
+			const channel = await resolver.channel(mention);
 			(mentionNode as DiscordChannelMentionNode).name =
 				channel ?? "unknown-channel";
 			break;
 		case "emoji":
 			(mentionNode as DiscordEmojiMentionNode).url =
-				await resolver(mention);
+				await resolver.emoji(mention);
 			break;
 		case "timestamp":
-			const timestamp = await resolver(mention);
+			const timestamp = await resolver.timestamp(mention);
 			if (timestamp !== null) {
 				(mentionNode as DiscordTimestampMentionNode).dateString =
 					timestamp;
