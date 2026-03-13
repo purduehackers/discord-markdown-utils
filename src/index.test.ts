@@ -212,7 +212,7 @@ describe("timestamp formatting", () => {
 	test("formats date in America/Indianapolis timezone", async () => {
 		const [node] = await getNodes("<t:1700000000>");
 		expect((node as DiscordTimestampMentionNode).dateString).toBe(
-			new Date(1700000000).toLocaleString("en-US", {
+			new Date(1700000000000).toLocaleString("en-US", {
 				timeZone: "America/Indianapolis",
 			}),
 		);
@@ -291,7 +291,7 @@ describe("HTML output", () => {
 
 	test("timestamp renders formatted date string", async () => {
 		const html = await getHtml("<t:1700000000>");
-		const expected = new Date(1700000000).toLocaleString("en-US", {
+		const expected = new Date(1700000000000).toLocaleString("en-US", {
 			timeZone: "America/Indianapolis",
 		});
 		expect(html).toContain(`class="discord-timestamp">${expected}`);

@@ -191,7 +191,7 @@ function findMentions(text: string): PositionedMention[] {
 			end: m.index! + m[0].length,
 			mention: {
 				type: "timestamp",
-				date: new Date(parseInt(m[1]!, 10)),
+				date: new Date(parseInt(m[1]!, 10) * 1000),
 			},
 		});
 	}
