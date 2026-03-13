@@ -88,15 +88,46 @@ declare module "mdast" {
 
 // TypeScript doesn't have dependent typing, so we can't have a single function
 // which returns different types based on the parameter type.
+/**
+ * Mention Resolver
+ *
+ * A collection of functions which query Discord, a cache/database, etc. to find
+ * the names of entities mentioned by their IDs.
+ */
 export interface Resolver {
+	/**
+	 * User resolver
+	 * @param mention a mention of a user
+	 * @returns the display name for the mentioned user, or null if not found
+	 */
 	user(mention: Extract<Mention, { type: "user" }>): Promise<string | null>;
+	/**
+	 * Role resolver
+	 * @param mention a mention of a role
+	 * @returns the display name and color for the mentioned role, or null if not found
+	 */
 	role(
 		mention: Extract<Mention, { type: "role" }>,
 	): Promise<{ name: string; color?: string } | null>;
+	/**
+	 * Channel resolver
+	 * @param mention a mention of a channel
+	 * @returns the display name for the mentioned channel, or null if not found
+	 */
 	channel(
 		mention: Extract<Mention, { type: "channel" }>,
 	): Promise<string | null>;
+	/**
+	 * Emoji resolver
+	 * @param mention a mention of an emoji
+	 * @returns the emoji image URL, or null if not found
+	 */
 	emoji(mention: Extract<Mention, { type: "emoji" }>): Promise<string | null>;
+	/**
+	 * Timestamp resolver
+	 * @param mention a mention of a timestamp
+	 * @returns the formatted timestamp string, or null if not found
+	 */
 	timestamp(
 		mention: Extract<Mention, { type: "timestamp" }>,
 	): Promise<string | null>;
