@@ -291,9 +291,12 @@ describe("HTML output", () => {
 
 	test("timestamp renders formatted date string", async () => {
 		const html = await getHtml("<t:1700000000>");
-		const expected = new Date(1700000000000).toLocaleString("en-US", {
+		const date = new Date(1700000000000);
+		const expected = date.toLocaleString("en-US", {
 			timeZone: "America/Indianapolis",
 		});
+		expect(html).toContain(`<time `);
+		expect(html).toContain(`datetime="${date.toISOString()}"`);
 		expect(html).toContain(`class="discord-timestamp">${expected}`);
 	});
 });

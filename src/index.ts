@@ -352,7 +352,7 @@ export const discordRemarkRehypeHandlers: Record<
 			type: "element",
 			tagName: "time",
 			properties: {
-				datetime: node.date.toISOString(),
+				dateTime: node.date.toISOString(),
 				className: ["discord-timestamp"],
 			},
 			children: [{ type: "text", value: node.dateString }],
