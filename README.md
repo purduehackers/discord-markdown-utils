@@ -118,16 +118,16 @@ is added to each element representing a Discord mention so you can style them
 using CSS. For roles with colors, the role color is added a a custom property
 (`--role-color`) so you can reference it in your own styles.
 
-| Type                             | HTML                                                                     |
-| -------------------------------- | ------------------------------------------------------------------------ |
-| User                             | `<span class="discord-user">Display Name</span>`                         |
-| Role                             | `<span class="discord-role">Role Name</span>`                            |
-| Role (with color)                | `<span class="discord-role" style="--role-color: ...;">Role Name</span>` |
-| Channel                          | `<span class="discord-channel">channel-name</span>`                      |
-| Emoji                            | `<img src="..." alt="name" class="discord-emoji">`                       |
-| Emoji (fallback when `null` URL) | `<span class="discord-emoji">:name:</span>`                              |
-| Timestamp                        | `<span class="discord-timestamp">formatted date</span>`                  |
-| Command                          | `<span class="discord-command">/command</span>`                          |
+| Type                             | HTML                                                                                        |
+| -------------------------------- | ------------------------------------------------------------------------------------------- |
+| User                             | `<span class="discord-user">Display Name</span>`                                            |
+| Role                             | `<span class="discord-role">Role Name</span>`                                               |
+| Role (with color)                | `<span class="discord-role" style="--role-color: ...;">Role Name</span>`                    |
+| Channel                          | `<span class="discord-channel">Channel Name</span>`                                         |
+| Emoji                            | `<img src="..." alt="name" class="discord-emoji">`                                          |
+| Emoji (fallback when `null` URL) | `<span class="discord-emoji">:name:</span>`                                                 |
+| Timestamp                        | `<time datetime="2026-04-07T03:16:58.576Z" class="discord-timestamp">formatted date</time>` |
+| Command                          | `<span class="discord-command">/command</span>`                                             |
 
 ## Fallback Values
 

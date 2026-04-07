@@ -347,8 +347,19 @@ export const discordRemarkRehypeHandlers: Record<
 		return mentionSpan(state, node, "discord-emoji", `:${node.name}:`);
 	},
 
-	discordTimestamp: (state: State, node: DiscordTimestampMentionNode) =>
-		mentionSpan(state, node, "discord-timestamp", node.dateString),
+	discordTimestamp: (state: State, node: DiscordTimestampMentionNode) => {
+		const result: Element = {
+			type: "element",
+			tagName: "time",
+			properties: {
+				datetime: node.date.toISOString(),
+				className: ["discord-timestamp"],
+			},
+			children: [{ type: "text", value: node.dateString }],
+		};
+		state.patch(node, result);
+		return state.applyData(node, result);
+	},
 
 	discordCommand: (state: State, node: DiscordCommandMentionNode) =>
 		mentionSpan(state, node, "discord-command", node.commandText),
